@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const AddZone = () => {
   const [zone, setZone] = useState({
@@ -7,7 +8,14 @@ const AddZone = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`${zone.name}`);
+    const newZone = {
+      name: zone.name,
+    };
+    axios.post("/api/zones", newZone).then((res) => console.log(res.data));
+
+    setZone({
+      name: "",
+    });
   };
 
   const handleChange = (e) => {
