@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import { UserContext } from "../App";
 
 const AddZone = () => {
+  const { userData, setUserData } = useContext(UserContext);
+
   const [zone, setZone] = useState({
     name: "",
   });
@@ -32,15 +35,22 @@ const AddZone = () => {
     <div>
       <h1>Add a Zone</h1>
       <form onSubmit={handleSubmit}>
-        <label>Zone Name: </label>
-        <input
-          type="text"
-          name="name"
-          value={zone.name}
-          required
-          onChange={handleChange}
-        />
-        <br />
+        {userData.user ? (
+          <>
+            <label>Zone Name: </label>
+            <input
+              type="text"
+              name="name"
+              value={zone.name}
+              required
+              onChange={handleChange}
+            />
+            <br />
+            <input type="submit" value="Add Zone!" />
+          </>
+        ) : (
+          <p>You need to log in to create a new Zone</p>
+        )}
       </form>
     </div>
   );

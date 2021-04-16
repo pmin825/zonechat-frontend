@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../../App";
+import axios from "axios";
 
 const Login = () => {
   const { userData, setUserData } = useContext(UserContext);
@@ -9,14 +10,22 @@ const Login = () => {
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newUser = {
       name: user.name,
       password: user.password,
     };
-    // axios.post("/api/users", newUser).then((res) => console.log(res.data));
-    console.log("userData: ", userData);
+    const loginResponse = await axios.post("/api/users/login", newUser);
+    console.log(loginResponse.data);
+
+    setUserData({
+      token: loginResponse.data.token,
+      user: loginResponse.data.user,
+    });
+    localStorage.setItem("auth-token", loginResponse.data.token);
+    window.location="/allzones"
+
     setUser({
       name: "",
       password: "",

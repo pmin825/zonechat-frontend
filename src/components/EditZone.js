@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../App";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 
 const EditZone = ({ match }) => {
+  const { userData, setUserData } = useContext(UserContext);
+
   const [zone, setZone] = useState({
     name: "",
   });
 
   useEffect(() => {
     axios.get("/api/zones/" + match.params.id).then((res) => setZone(res.data));
-  });
+  }, []);
 
   const zoneUpdate = () => {
     axios
@@ -37,22 +40,28 @@ const EditZone = ({ match }) => {
 
   return (
     <div>
-      <h1>Edit {zone.name}</h1>
-      <label>Zone Name: </label>
-      <input
-        type="text"
-        name="name"
-        value={zone.name}
-        required
-        onChange={handleChange}
-      />
-      <br />
-      <Button className="btn btn-warning" onClick={zoneUpdate}>
-        Update Zone
-      </Button>
-      <Button className="btn btn-danger" onClick={zoneDelete}>
-        Delete Zone
-      </Button>
+      <h1>Edit Zone</h1>
+      {userData.user ? (
+        <>
+          <label>Zone Name: </label>
+          <input
+            type="text"
+            name="name"
+            value={zone.name}
+            required
+            onChange={handleChange}
+          />
+          <br />
+          <Button className="btn btn-warning" onClick={zoneUpdate}>
+            Update Zone
+          </Button>
+          <Button className="btn btn-danger" onClick={zoneDelete}>
+            Delete Zone
+          </Button>
+        </>
+      ) : (
+        <p>You need to log in to edit</p>
+      )}
     </div>
   );
 };

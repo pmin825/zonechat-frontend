@@ -1,32 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../../App";
+import axios from "axios";
 // import axios from "axios";
 
 const Register = () => {
+  const { userData, setUserData } = useContext(UserContext);
   const [user, setUser] = useState({
     name: "",
     password: "",
     confirmPassword: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newUser = {
-      name: user.name,
-      password: user.password,
-    };
+    try {
+      const newUser = {
+        name: user.name,
+        password: user.password,
+      };
+      if (user.password !== user.confirmPassword) {
+        console.log("incorrect password");
+      } else {
+        console.log(newUser);
+      }
+      await axios.post("/api/users/register", newUser);
 
-    if (user.password !== user.confirmPassword) {
-      console.log("incorrect password");
-    } else {
-      console.log(newUser);
+      const loginResponse = await axios.post("/api/users/login", newUser);
+      setUserData({
+        token: loginResponse.data.token,
+        user: loginResponse.data.user,
+      });
+      localStorage.setItem("auth-token", loginResponse.data.token);
+
+      setUser({
+        name: "",
+        password: "",
+        confirmPassword: "",
+      });
+      window.location = "/allzones";
+    } catch (err) {
+      // err.response.data.msg
+      //   ? setErrorMsg(err.response.data.msg)
+      //   : setErrorMsg("We have some error!");
     }
-    // axios.post("/api/users", newUser).then((res) => console.log(res.data));
-
-    setUser({
-      name: "",
-      password: "",
-      confirmPassword: "",
-    });
   };
 
   const handleChange = (e) => {

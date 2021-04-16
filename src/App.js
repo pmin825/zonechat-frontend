@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+
 import Header from "./components/Header";
 import Welcome from "./components/Welcome";
 import AllZones from "./components/AllZones";
@@ -46,10 +47,10 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Header />
-      <Container>
-        <UserContext.Provider value={{ userData, setUserData }}>
+    <UserContext.Provider value={{ userData, setUserData }}>
+      <Router>
+        <Header />
+        <Container>
           <Route path="/" exact component={Welcome} />
           <Route path="/allzones" component={AllZones} />
           <Route path="/addzone" component={AddZone} />
@@ -57,9 +58,9 @@ function App() {
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Profile} />
-        </UserContext.Provider>
-      </Container>
-    </Router>
+        </Container>
+      </Router>
+    </UserContext.Provider>
   );
 }
 
