@@ -20,6 +20,14 @@ const Header = () => {
                 <Nav.Link>Add New Zone</Nav.Link>
               </LinkContainer>
             </Nav>
+            <Nav className="ml-auto">
+              <LinkContainer to="/register">
+                <Nav.Link>Register</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/login">
+                <Nav.Link>Log in</Nav.Link>
+              </LinkContainer>
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>

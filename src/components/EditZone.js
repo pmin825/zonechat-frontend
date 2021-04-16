@@ -9,7 +9,7 @@ const EditZone = ({ match }) => {
 
   useEffect(() => {
     axios.get("/api/zones/" + match.params.id).then((res) => setZone(res.data));
-  }, []);
+  });
 
   const zoneUpdate = () => {
     axios
