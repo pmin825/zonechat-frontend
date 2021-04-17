@@ -16,16 +16,22 @@ const EditZone = ({ match }) => {
 
   const zoneUpdate = () => {
     axios
-      .put("/api/zones/" + match.params.id, zone)
-      .then((zone) => console.log(zone));
-    window.location = "/allzones";
+      .put("/api/zones/" + match.params.id, zone, {
+        headers: {
+          "auth-token": userData.token,
+        },
+      })
+      .then((window.location = "/allzones"));
   };
 
   const zoneDelete = () => {
     axios
-      .delete("/api/zones/" + match.params.id, zone)
-      .then((res) => console.log(res.status));
-    window.location = "/allzones";
+      .delete("/api/zones/" + match.params.id, zone, {
+        headers: {
+          "auth-token": userData.token,
+        },
+      })
+      .then((window.location = "/allzones"));
   };
 
   const handleChange = (e) => {

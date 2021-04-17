@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../../App";
 import axios from "axios";
-// import axios from "axios";
+import ErrorMsg from "../ErrorMsg";
 
 const Register = () => {
   const { userData, setUserData } = useContext(UserContext);
@@ -10,6 +10,7 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +20,8 @@ const Register = () => {
         password: user.password,
       };
       if (user.password !== user.confirmPassword) {
-        console.log("incorrect password");
+        setErrorMsg("Passwords did not match");
+        return;
       } else {
         console.log(newUser);
       }
@@ -38,10 +40,10 @@ const Register = () => {
         confirmPassword: "",
       });
       window.location = "/allzones";
-    } catch (err) {
-      // err.response.data.msg
-      //   ? setErrorMsg(err.response.data.msg)
-      //   : setErrorMsg("We have some error!");
+    } catch (error) {
+      error.response.data.msg
+        ? setErrorMsg(error.response.data.msg)
+        : setErrorMsg("We have some error!");
     }
   };
 
@@ -58,6 +60,7 @@ const Register = () => {
   return (
     <div>
       <h1>Register</h1>
+      {errorMsg && <ErrorMsg msg={errorMsg} />}
       <form onSubmit={handleSubmit}>
         <label>User Name: </label>
         <input

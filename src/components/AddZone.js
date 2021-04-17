@@ -13,12 +13,20 @@ const AddZone = () => {
     e.preventDefault();
     const newZone = {
       name: zone.name,
+      createdBy: userData.user.name,
     };
-    axios.post("/api/zones", newZone).then((res) => console.log(res.data));
+    axios
+      .post("/api/zones", newZone, {
+        headers: {
+          "auth-token": userData.token,
+        },
+      })
+      .then((res) => console.log(res.data));
 
     setZone({
       name: "",
     });
+    window.location = "/allzones";
   };
 
   const handleChange = (e) => {

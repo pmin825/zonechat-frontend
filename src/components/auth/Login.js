@@ -1,9 +1,11 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../../App";
 import axios from "axios";
+import ErrorMsg from "../ErrorMsg";
 
 const Login = () => {
   const { userData, setUserData } = useContext(UserContext);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [user, setUser] = useState({
     name: "",
@@ -12,24 +14,30 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newUser = {
-      name: user.name,
-      password: user.password,
-    };
-    const loginResponse = await axios.post("/api/users/login", newUser);
-    console.log(loginResponse.data);
+    try {
+      const newUser = {
+        name: user.name,
+        password: user.password,
+      };
+      const loginResponse = await axios.post("/api/users/login", newUser);
+      console.log(loginResponse.data);
 
-    setUserData({
-      token: loginResponse.data.token,
-      user: loginResponse.data.user,
-    });
-    localStorage.setItem("auth-token", loginResponse.data.token);
-    window.location="/allzones"
+      setUserData({
+        token: loginResponse.data.token,
+        user: loginResponse.data.user,
+      });
+      localStorage.setItem("auth-token", loginResponse.data.token);
+      window.location = "/allzones";
 
-    setUser({
-      name: "",
-      password: "",
-    });
+      setUser({
+        name: "",
+        password: "",
+      });
+    } catch (error) {
+      error.response.data.msg
+        ? setErrorMsg(error.response.data.msg)
+        : setErrorMsg("We have an error");
+    }
   };
 
   const handleChange = (e) => {
@@ -45,6 +53,7 @@ const Login = () => {
   return (
     <div>
       <h1>Log in</h1>
+      {errorMsg && <ErrorMsg msg={errorMsg} />}
       <form onSubmit={handleSubmit}>
         <label>User Name: </label>
         <input
