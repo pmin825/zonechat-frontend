@@ -33,6 +33,9 @@ const Header = () => {
             </Nav>
             {userData.user ? (
               <Nav className="ml-auto">
+                <LinkContainer to="/chat">
+                  <Nav.Link>Chat</Nav.Link>
+                </LinkContainer>
                 <LinkContainer to="/profile">
                   <Nav.Link>Profile ({userData.user.name})</Nav.Link>
                 </LinkContainer>

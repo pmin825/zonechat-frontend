@@ -11,6 +11,7 @@ import EditZone from "./components/EditZone";
 import Login from "./components/auth/Login";
 import Profile from "./components/auth/Profile";
 import Register from "./components/auth/Register";
+import Chat from "./components/Chat";
 
 export const UserContext = createContext();
 
@@ -58,6 +59,7 @@ function App() {
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Profile} />
+          <Route path="/chat" component={Chat} />
         </Container>
       </Router>
     </UserContext.Provider>

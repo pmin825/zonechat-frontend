@@ -29,12 +29,12 @@ const AllZones = () => {
               return zone;
             }
           })
-          .map((z) => (
-            <li key={z._id}>
-              <Link to={`/zone/${z._id}`}>
-                <b>{z.name} Zone</b>
+          .map((zone) => (
+            <li key={zone._id}>
+              <Link to={`/zone/${zone._id}`}>
+                <b>{zone.name} Zone</b>
               </Link>{" "}
-              created by {z.createdBy}
+              created by {zone.createdBy}
             </li>
           ))}
       </ul>
