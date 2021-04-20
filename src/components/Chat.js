@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../App";
 import io from "socket.io-client";
 import { Container, Col, Row } from "react-bootstrap";
 
@@ -10,21 +11,31 @@ const Chat = () => {
     name: "",
     msg: "",
     zone: "",
+    isPrivate: false,
   });
   const [msgList, setMsgList] = useState([]);
   const [currentZone, setCurrentZone] = useState("General Lobby");
 
   useEffect(() => {
-    socket.emit("updateUsers");
+    socket.emit("userJoin", userData.user.name);
   }, []);
 
+  const { userData, setUserData } = useContext(UserContext);
+
   socket.on("newMessage", (newMessage) => {
-    setMsgList([...msgList, { name: newMessage.name, msg: newMessage.msg }]);
+    setMsgList([
+      ...msgList,
+      {
+        name: newMessage.name,
+        msg: newMessage.msg,
+        isPrivate: newMessage.isPrivate,
+      },
+    ]);
   });
 
   socket.on("userList", (userList) => {
     setChatUsers(userList);
-    setChatMessage({ name: socket.id, msg: chatMessage.msg });
+    setChatMessage({ name: userData.user.name, msg: chatMessage.msg });
   });
 
   const handleChange = (e) => {
@@ -37,12 +48,13 @@ const Chat = () => {
       name: chatMessage.name,
       msg: chatMessage.msg,
       zone: currentZone,
+      isPrivate: privateChat(currentZone, chatUsers),
     };
 
     socket.emit("newMessage", newMessage);
 
     setChatMessage({
-      name: socket.id,
+      name: userData.user.name,
       msg: "",
     });
   };
@@ -55,6 +67,16 @@ const Chat = () => {
     setMsgList([]);
   };
 
+  const privateChat = (zoneName, userList) => {
+    let isPrivate = false;
+    userList.forEach((userName) => {
+      debugger;
+      if (userName === zoneName) {
+        isPrivate = true;
+      }
+    });
+    return isPrivate;
+  };
   return (
     <Container>
       <Row>
@@ -106,7 +128,15 @@ const Chat = () => {
                 return (
                   <li key={idx}>
                     <b>{msgList.name}: </b>
-                    <i>{msgList.msg}</i>
+                    <i>
+                      <span
+                        style={{
+                          color: msgList.isPrivate ? "red" : "black",
+                        }}
+                      >
+                        {msgList.msg}
+                      </span>
+                    </i>
                   </li>
                 );
               })}
